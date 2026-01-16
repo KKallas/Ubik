@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M5 Atom Relay Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .color-picker-container {
+            margin: 30px 0;
+        }
+        #colorPicker {
+            width: 200px;
+            height: 50px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #colorValue {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #666;
+        }
+        .relay-container {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .relay-container label {
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #relayCheckbox {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>M5 Atom Relay Control</h1>
+
+    <div class="color-picker-container">
+        <label for="colorPicker">Choose LED Color:</label><br><br>
+        <input type="color" id="colorPicker" value="#00ff00">
+        <div id="colorValue">#00ff00</div>
+    </div>
+
+    <div class="relay-container">
+        <label for="relayCheckbox">
+            Relay
+            <input type="checkbox" id="relayCheckbox">
+        </label>
+    </div>
+
+    <div id="status"></div>
+
+    <script>
+        const colorPicker = document.getElementById('colorPicker');
+        const colorValue = document.getElementById('colorValue');
+        const relayCheckbox = document.getElementById('relayCheckbox');
+        const status = document.getElementById('status');
+
+        colorPicker.addEventListener('input', function() {
+            const color = this.value;
+            colorValue.textContent = color;
+            setLEDColor(color);
+        });
+
+        relayCheckbox.addEventListener('change', function() {
+            const state = this.checked ? 'on' : 'off';
+            setRelayState(state);
+        });
+
+        function setLEDColor(color) {
+            fetch(`/api/color?color=${encodeURIComponent(color)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        status.className = 'status success';
+                        status.textContent = `LED color set to ${data.color}`;
+                    } else {
+                        status.className = 'status error';
+                        status.textContent = `Error: ${data.error}`;
+                    }
+                })
+                .catch(error => {
+                    status.className = 'status error';
+                    status.textContent = `Error: ${error.message}`;
+                });
+        }
+
+        function setRelayState(state) {
+            fetch(`/api/relay?state=${state}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        status.className = 'status success';
+                        status.textContent = `Relay turned ${data.relay ? 'ON' : 'OFF'}`;
+                    } else {
+                        status.className = 'status error';
+                        status.textContent = `Error: ${data.error}`;
+                    }
+                })
+                .catch(error => {
+                    status.className = 'status error';
+                    status.textContent = `Error: ${error.message}`;
+                });
+        }
+
+        function loadStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update color picker
+                        colorPicker.value = data.color;
+                        colorValue.textContent = data.color;
+
+                        // Update relay checkbox
+                        relayCheckbox.checked = data.relay;
+
+                        status.className = 'status success';
+                        status.textContent = 'Status loaded';
+                    }
+                })
+                .catch(error => {
+                    status.className = 'status error';
+                    status.textContent = `Error loading status: ${error.message}`;
+                });
+        }
+
+        // Smart polling: faster when page is visible, slower when hidden
+        let pollInterval;
+
+        function startPolling() {
+            // Poll every 500ms when page is visible
+            pollInterval = setInterval(loadStatus, 500);
+        }
+
+        function stopPolling() {
+            if (pollInterval) {
+                clearInterval(pollInterval);
+            }
+        }
+
+        // Adjust polling based on page visibility
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopPolling();
+            } else {
+                loadStatus(); // Immediate update when page becomes visible
+                startPolling();
+            }
+        });
+
+        // Load initial status on page load and start polling
+        window.addEventListener('load', function() {
+            loadStatus();
+            if (!document.hidden) {
+                startPolling();
+            }
+        });
+    </script>
+</body>
+</html>
