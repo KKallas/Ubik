@@ -1,0 +1,93 @@
+# Arduino IDE files
+*.hex
+*.eep
+*.elf
+*.map
+
+# Build directories
+build/
+.build/
+
+# Arduino IDE 2.x
+.vscode/
+.arduino/
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# ESP32 specific
+*.bin
+*.map
+bootloader.bin
+partitions.bin
+
+# LittleFS build artifacts
+*.spiffs.bin
+*.littlefs.bin
+data/.DS_Store
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+.directory
+
+# Editor backups
+*~
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+
+# Log files
+*.log
+
+# IDE specific
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# Python (if using build scripts)
+__pycache__/
+*.py[cod]
+*.pyc
+venv/
+env/
+
+# Node.js (if relay server is Node-based)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.local
+secrets.json
+credentials.json
+
+# Certificates and keys
+*.pem
+*.key
+*.crt
+*.p12
+
+# Compiled libraries
+*.a
+*.so
+*.dylib
+*.dll
