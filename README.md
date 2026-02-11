@@ -13,21 +13,21 @@ Ubik is a framework for building web-controlled ESP32 devices (sensors, actuator
 
 Local Development & Testing:
 ┌──────────┐                ┌─────────────────────────────┐
-│  Browser │ ─── HTTP ───> │  ESP32 (192.168.4.1)        │
+│  Browser │ ─── HTTP ───>  │  ESP32 (192.168.4.1)        │
 │          │                │  - Web Server               │
 │          │                │  - HTML Interface           │
 │          │                │  - API Endpoints            │
-│          │ <── Response ─ │  - I2C/SPI/UART Hardware   │
+│          │ <── Response ─ │  - I2C/SPI/UART Hardware    │
 └──────────┘                └─────────────────────────────┘
 
 Remote Operation (via Relay Server):
-┌──────────┐         ┌─────────────────┐         ┌─────────────────┐
-│  Browser │ ─ HTTP ─> │  Relay Server   │ ─ VPN ─> │  ESP32 (Ubik)  │
-│          │         │  (Digital Ocean) │         │  - Same HTML    │
-│          │         │  Relays to:      │         │  - Same APIs    │
-│          │         │  /api/{ubik_id}/ │         │  - Hardware     │
-│          │ <─────── │                 │ <─────── │                │
-└──────────┘         └─────────────────┘         └─────────────────┘
+┌──────────┐           ┌──────────────────┐          ┌────────────────┐
+│  Browser │ ─ HTTP ─> │  Relay Server    │ ─ VPN ─> │  ESP32 (Ubik)  │
+│          │           │  (Digital Ocean) │          │  - Same HTML   │
+│          │           │  Relays to:      │          │  - Same APIs   │
+│          │           │  /api/{ubik_id}/ │          │  - Hardware    │
+│          │ <──────── │                  │ <─────── │                │
+└──────────┘           └──────────────────┘          └────────────────┘
 ```
 
 ### Communication Flow
@@ -303,8 +303,8 @@ This repository will contain:
 
 ## Related Repositories
 
-- [relay-server](https://github.com/YOUR_USERNAME/ubik-relay-server) - Relay server implementation *(Coming Soon)*
-- [ubik-examples](https://github.com/YOUR_USERNAME/ubik-examples) - Additional hardware examples *(Coming Soon)*
+- /relay-server - Relay server implementation *(Coming Soon)*
+- /ubik-examples - Additional hardware examples *(Coming Soon)*
 
 ## Community
 
@@ -315,7 +315,6 @@ This repository will contain:
 
 Built with:
 - [Arduino Core for ESP32](https://github.com/espressif/arduino-esp32)
-- [FastLED](https://github.com/FastLED/FastLED)
 - [M5Stack Atom](https://shop.m5stack.com/collections/atom-series)
 
 ---
